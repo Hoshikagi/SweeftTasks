@@ -1,0 +1,30 @@
+CREATE TABLE Teacher (
+    TeacherId INT PRIMARY KEY,
+    FirstName VARCHAR(50) NOT NULL,
+    LastName VARCHAR(50) NOT NULL,
+    Gender CHAR(1) NOT NULL,
+    Subject VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE Pupil (
+    PupilId INT PRIMARY KEY,
+    FirstName VARCHAR(50) NOT NULL,
+    LastName VARCHAR(50) NOT NULL,
+    Gender CHAR(1) NOT NULL,
+    Class VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE TeacherPupil (
+    TeacherId INT NOT NULL,
+    PupilId INT NOT NULL,
+    PRIMARY KEY (TeacherId, PupilId),
+    FOREIGN KEY (TeacherId) REFERENCES Teacher (TeacherId),
+    FOREIGN KEY (PupilId) REFERENCES Pupil (PupilId)
+);
+
+
+SELECT t.TeacherId, t.FirstName, t.LastName, t.Gender, t.Subject
+FROM Teacher t
+JOIN TeacherPupil tp ON t.TeacherId = tp.TeacherId
+JOIN Pupil p ON p.PupilId = tp.PupilId
+WHERE p.FirstName = გიორგი
