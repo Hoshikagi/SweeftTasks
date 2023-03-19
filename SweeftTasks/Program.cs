@@ -1,6 +1,9 @@
-﻿
+﻿#region tasks 
+using SweeftTasks;
+using System.Text.Json;
 
-#region tasks 
+
+await GenerateCountryDataFiles();
 static bool IsPalindrome(string text)
 {
     string emptyString = "";
@@ -118,6 +121,28 @@ static bool IsProperly(string sequence)
     }
 
     return variants[stairCount]; 
+}
+
+
+static async Task GenerateCountryDataFiles()
+{
+    using var client = new HttpClient();
+    var response = await client.GetAsync("https://restcountries.com/v3.1/all");
+    var json = await response.Content.ReadAsStringAsync();
+    var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+    var countries = JsonSerializer.Deserialize<Country[]>(json, options);
+
+    foreach (var country in countries)
+    {
+        var fileName = $"{country.Name}.txt";
+        var fileContent = $"Region: {country.Region}\n" +
+                          $"Subregion: {country.Subregion}\n" +
+                          $"Latlng: {string.Join(",", country.Latlng)}\n" +
+                          $"Area: {country.Area}\n" +
+                          $"Population: {country.Population}\n";
+
+        File.WriteAllText(fileName, fileContent);
+    }
 }
 
 #endregion
