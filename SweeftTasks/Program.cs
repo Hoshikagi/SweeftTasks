@@ -124,6 +124,7 @@ static bool IsProperly(string sequence)
 }
 
 
+
 static async Task GenerateCountryDataFiles()
 {
     using var client = new HttpClient();
